@@ -7,7 +7,7 @@ data sets.
 TODO(summeryue): Document supported datasets, attacks and defenses.
 
 Milestones:
-- Build a vanila MNIST classifier.
+- Build a vanilla MNIST classifier.
 - Build an FGSM attacker which attacks the vanila MNIST classifier.
 - Build a vanila CIFAR10 classifier.
 - Extend the FGSM attacker to be able to attack an CIFAR10 classifier.
