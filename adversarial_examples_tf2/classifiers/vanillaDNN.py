@@ -16,21 +16,23 @@ class VanillaDNN(BaseClassifier):
         specified activation functions and dropout ratio for each layer.
 
         Args:
-            input_shape: The shape of the input data without the batch size
-                dimension. For example, MNIST's input shape would be (28, 28).
-            output_shape: The shape of the output data without the batch size
-                dimension. For example, MNIST's output shape would be ().
-            model_params: A list representing the parameters of the fully
+            input_shape (tuple(int)): The shape of the input data without the
+                batch size dimension. For example, MNIST's input shape would be
+                (28, 28).
+            output_shape (tuple(int)): The shape of the output data without the
+                batch size dimension. For example, MNIST's output shape would be
+                ().
+            model_params (list of dict): the parameters of the fully
                 connected model. Each element is a dictionary representing one
                 layer. For example, a 2 layered network is represented as
-                [{"neuron_num": 128, "activation": "relu", "dropout_ratio":
-                0.2}, {"neuron_num": 10, "activation": "softmax"}] The
-                default activation function is relu if unspecified. The default
+                [{"neuron_num": 128, "activation": "relu", "dropout_ratio": 0.2},
+                {"neuron_num": 10, "activation": "softmax"}] The default
+                activation function is relu if unspecified. The default
                 dropout ratio is 0 if unspecified.
-            optimizer: string (name of optimizer) or tf.keras.optimizers
-                instance. The optimizer used for model training.
-            loss: string (name of objective function), objective function or
-                tf.losses.Loss instance.
+            optimizer (string or tf.keras.optimizers): The optimizer used for
+                model training.
+            loss: (string name of objective function, objective function or
+                tf.losses.Loss instance): the loss function used for training.
 
         Raises:
             ValueError:
@@ -41,7 +43,8 @@ class VanillaDNN(BaseClassifier):
         self.input_shape = input_shape
         self.output_shape = output_shape
         self.optimizer = optimizer
-        self.loss = loss
+        # Convert the input loss to a callable loss function if needed.
+        self.loss = tf.losses.get(loss)
 
         self.model = tf.keras.models.Sequential([tf.keras.layers.Flatten(
             input_shape=self.input_shape)])
@@ -59,8 +62,8 @@ class VanillaDNN(BaseClassifier):
                 self.model.add(tf.keras.layers.Dropout(layer_params[
                                                            "dropout_ratio"]))
 
-        self.model.compile(optimizer=self.optimizer,
-                loss=self.loss, metrics=["accuracy"])
+        self.model.compile(optimizer=self.optimizer, loss=self.loss,
+                           metrics=["accuracy"])
 
     def validate_data(self, data):
         """
@@ -73,11 +76,11 @@ class VanillaDNN(BaseClassifier):
         batch size.
 
         Args:
-            data: tf.data.Dataset object representing the data to be fed into
-                the classifier for training or eval.
+            data (tf.data.Dataset): the dataset to be fed into
+                the model for training or eval.
 
         Returns:
-            a boolean flag indicating whether the data is valid.
+            (boolean): whether the input dataset is valid.
 
         """
         return data.element_spec[0].shape[1:] == self.input_shape and \
@@ -89,10 +92,9 @@ class VanillaDNN(BaseClassifier):
         dataset.
 
         Args:
-            data: tf.data.Dataset object representing the data the classifier
-                uses for training.
-            epochs: the number of epochs, the number of times the given dataset
-                was iterated over during training.
+            data (tf.data.Dataset): the dataset the model uses for training.
+            epochs (int): the number of epochs, the number of times the given
+                dataset was iterated over during training.
 
         Raises:
             ValueError:
@@ -108,11 +110,11 @@ class VanillaDNN(BaseClassifier):
         Evaluate the trained model on a test dataset.
 
         Args:
-            data: tf.data.Dataset object representing the data the classifier
-                uses for evaluation.
+            data (tf.data.Dataset): the dataset the model uses for evaluation.
 
         Returns:
-            The loss and accuracy on the input test dataset.
+            (int or list of ints): the loss for the test dataset.
+            (double or list of double): the accuracy for the test dataset.
 
         Raises:
             ValueError:
@@ -123,3 +125,29 @@ class VanillaDNN(BaseClassifier):
                              "input: {}".format(data))
         loss, accuracy = self.model.evaluate(data)
         return loss, accuracy
+
+    def get_loss_fn(self, reduction=tf.keras.losses.Reduction.AUTO):
+        """
+
+        Args:
+            reduction: (tf.keras.losses.Reduction)(Optional) type of
+                reduction to apply to loss. Default value is `AUTO`. `AUTO`
+                indicates that the reduction option will be determined by the
+                usage context. For almost all cases this defaults to
+                `SUM_OVER_BATCH_SIZE`. When used in taking the gradient of
+                the loss with respect to individual input such as in
+                FGSMAttacker, reduction should be set to
+                tf.keras.losses.Reduction.NONE.
+
+        Returns:
+            (LossFunctionWrapper or a callable loss function): the loss
+                function the classifier uses, should take in (label_tensor,
+                logit_tensor) and return the loss.
+
+        TODO(summeryue): Output self.loss with a modified reduction function
+            here instead.
+
+        """
+        return tf.keras.losses.SparseCategoricalCrossentropy(
+            reduction=tf.keras.losses.Reduction.NONE)
+
