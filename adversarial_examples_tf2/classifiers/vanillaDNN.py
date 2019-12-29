@@ -93,12 +93,12 @@ class VanillaDNN(BaseClassifier):
 
         Args:
             data (tf.data.Dataset): the dataset the model uses for training.
+                The dataset shape needs to match the input shape set in the
+                initializer. For example, for MNIST, self.input_shape = (28, 28)
+                and the dataset feature shape needs to be (None, 28, 28).
             epochs (int): the number of epochs, the number of times the given
                 dataset was iterated over during training.
 
-        Raises:
-            ValueError:
-                if the training data shape does not match input_shape.
         """
         if not self.validate_data(data):
             raise ValueError("The training data is not a valid classifier "
@@ -111,14 +111,14 @@ class VanillaDNN(BaseClassifier):
 
         Args:
             data (tf.data.Dataset): the dataset the model uses for evaluation.
+                The dataset shape needs to match the input shape set in the
+                initializer. For example, for MNIST, self.input_shape = (28, 28)
+                and the dataset feature shape needs to be (None, 28, 28).
 
         Returns:
             (int or list of ints): the loss for the test dataset.
             (double or list of double): the accuracy for the test dataset.
 
-        Raises:
-            ValueError:
-                if the evaluation data shape does not match input_shape.
         """
         if not self.validate_data(data):
             raise ValueError("The eval data is not a valid classifier "

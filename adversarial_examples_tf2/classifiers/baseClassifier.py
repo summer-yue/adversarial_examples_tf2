@@ -30,13 +30,12 @@ class BaseClassifier(object):
         dataset.
 
         Args:
-            data (tf.data.Dataset): the dataset the model uses for training.
+            data (tf.data.Dataset): the dataset the model uses for training. The
+                dataset shape needs to match the input shape set in the
+                initializer. For example, for MNIST, self.input_shape = (28, 28)
+                and the dataset feature shape needs to be (None, 28, 28).
             epochs (int): the number of epochs, the number of times the given
                 dataset was iterated over during training.
-
-        Raises:
-            ValueError:
-                if the training data is invalid - if validate_data(data) fails.
         """
         raise NotImplementedError
 
@@ -47,10 +46,10 @@ class BaseClassifier(object):
 
         Args:
             data (tf.data.Dataset): the dataset the model uses for evaluation.
+                The dataset shape needs to match the input shape set in the
+                initializer. For example, for MNIST, self.input_shape = (28, 28)
+                and the dataset feature shape needs to be (None, 28, 28).
 
-        Raises:
-            ValueError:
-                if the eval data shape does not match input_shape.
         """
         raise NotImplementedError
 
@@ -60,9 +59,9 @@ class BaseClassifier(object):
 
         Args:
             reduction: (tf.keras.losses.Reduction)(Optional) Type of
-                reduction to
-                apply to loss. Default value is `AUTO`. `AUTO` indicates that
-                the reduction option will be determined by the usage context.
+                reduction to apply to loss. Default value is `AUTO`. `AUTO`
+                indicates that the reduction option will be determined by the
+                usage context.
                 For almost all cases this defaults to `SUM_OVER_BATCH_SIZE`.
                 When used in taking the gradient of the loss with respect to
                 individual input such as in FGSMAttacker, reduction should
