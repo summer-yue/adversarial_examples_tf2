@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from adversarial_examples_tf2.classifiers.baseClassifier import BaseClassifier
+from adversarial_examples_tf2.classifiers.base_classifier import BaseClassifier
 
 
 class VanillaDNN(BaseClassifier):

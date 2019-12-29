@@ -6,8 +6,8 @@ Then apply FGSM attack on the model and re-evaluate its accuracy.
 
 import tensorflow as tf
 
-from adversarial_examples_tf2.attackers.fgsmAttacker import FGSMAttacker
-from adversarial_examples_tf2.classifiers.vanillaDNN import VanillaDNN
+from adversarial_examples_tf2.attackers.fgsm_attacker import FGSMAttacker
+from adversarial_examples_tf2.classifiers.vanilla_dnn import VanillaDNN
 
 
 def main():

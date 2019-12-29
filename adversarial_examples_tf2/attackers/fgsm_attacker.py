@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from adversarial_examples_tf2.attackers.baseAttacker import BaseAttacker
+from adversarial_examples_tf2.attackers.base_attacker import BaseAttacker
 
 
 class FGSMAttacker(BaseAttacker):
