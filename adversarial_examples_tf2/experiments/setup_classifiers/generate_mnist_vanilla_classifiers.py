@@ -1,0 +1,26 @@
+"""
+Train and save 10 simple fully connected MNIST classifiers for evaluating
+attack methods under the experiments/models folder.
+
+"""
+
+from adversarial_examples_tf2.experiments.classifier_utils.mnist_vanilla import get_trained_model
+from adversarial_examples_tf2.experiments.data_utils.mnist import load_mnist
+
+
+def main():
+    # Load MNIST data as tf.data.Dataset.
+    batch_size = 32
+    train_data, test_data = load_mnist(batch_size)
+
+    epochs = 1
+    paths = ['../models/mnist/fully_connected/model-{}-{}'
+        .format(epochs, i) for i in range(10)]
+
+    for path in paths:
+        # Compile and train a simple fully connected MNIST classifier.
+        classifier = get_trained_model(train_data, epochs=epochs)
+        classifier.save_to_file(path)
+
+if __name__ == "__main__":
+    main()

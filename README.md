@@ -7,10 +7,10 @@ data sets.
 TODO(summeryue): Document supported datasets, attacks and defenses.
 
 Milestones:
-- Build a vanilla MNIST classifier.
-- Build an FGSM attacker which attacks the vanila MNIST classifier.
-- Build a vanila CIFAR10 classifier.
-- Extend the FGSM attacker to be able to attack an CIFAR10 classifier.
-- Set up a classifier which increases its robustness with adversarial training. The adversarial examples are generated
-via FGSM.
+- (Done) Build a vanilla MNIST classifier.
+- (Done) Build an FGSM attacker which attacks the vanilla MNIST classifier.
+- Build a vanilla CIFAR 10 classifier.
+- Extend the FGSM attacker to be able to attack an CIFAR 10 classifier.
+- Set up a classifier which increases its robustness with adversarial training.
+The adversarial examples are generated via FGSM.
 - Add more attacks and defenses. TBD.

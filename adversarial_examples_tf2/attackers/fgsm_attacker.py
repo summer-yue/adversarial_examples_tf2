@@ -5,6 +5,14 @@ from adversarial_examples_tf2.attackers.base_attacker import BaseAttacker
 
 class FGSMAttacker(BaseAttacker):
     def __init__(self, model, epsilon):
+        """
+        Initialize a fast gradient sign method attacker.
+
+        Args:
+            model (BaseClassifier): the targeted classifier under attack.
+            epsilon (double): The epsilon parameter used in FGSM indicating the
+                scale of the perturbation.
+        """
         self.model = model
         self.epsilon = epsilon
 

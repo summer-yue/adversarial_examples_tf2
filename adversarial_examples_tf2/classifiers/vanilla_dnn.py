@@ -65,6 +65,21 @@ class VanillaDNN(BaseClassifier):
         self.model.compile(optimizer=self.optimizer, loss=self.loss,
                            metrics=["accuracy"])
 
+    @classmethod
+    def load_from_file(cls, path):
+        """
+        Create a classifier by loading an existing Keras model from disk.
+
+        Args:
+            path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+
+        Returns:
+            (VanillaDNN): the classifier object with a loaded trained model.
+
+        """
+        raise
+
     def validate_data(self, data):
         """
         Checks that whether the data shape is compatible with the shape
@@ -95,7 +110,8 @@ class VanillaDNN(BaseClassifier):
             data (tf.data.Dataset): the dataset the model uses for training.
                 The dataset shape needs to match the input shape set in the
                 initializer. For example, for MNIST, self.input_shape = (28, 28)
-                and the dataset feature shape needs to be (None, 28, 28).
+                and the dataset feature shape needs to be (None, 28, 28) and
+                the dataset label shape needs to be (None, ).
             epochs (int): the number of epochs, the number of times the given
                 dataset was iterated over during training.
 
@@ -113,7 +129,8 @@ class VanillaDNN(BaseClassifier):
             data (tf.data.Dataset): the dataset the model uses for evaluation.
                 The dataset shape needs to match the input shape set in the
                 initializer. For example, for MNIST, self.input_shape = (28, 28)
-                and the dataset feature shape needs to be (None, 28, 28).
+                and the dataset feature shape needs to be (None, 28, 28) and
+                the dataset label shape needs to be (None, ).
 
         Returns:
             (int or list of ints): the loss for the test dataset.
@@ -150,4 +167,32 @@ class VanillaDNN(BaseClassifier):
         """
         return tf.keras.losses.SparseCategoricalCrossentropy(
             reduction=tf.keras.losses.Reduction.NONE)
+
+    def save_to_file(self, path):
+        """
+        Save self.model on disk at a specified path.
+
+        Args:
+            path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+
+        """
+        # TODO(summeryue): test this and finish documentation.
+        self.model.save(path)
+
+    def load_from_file(self, path):
+        """
+        Load an existing model from disk into self.model.
+
+        Args:
+            path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+
+        Throws:
+            ValueError if the loaded model is incompatible with existing
+                instance variables related to model parameters.
+
+        """
+        # TODO(summeryue): test this and finish documentation.
+        self.model.load(path)
 

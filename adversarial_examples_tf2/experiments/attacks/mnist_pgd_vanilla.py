@@ -1,12 +1,13 @@
 """
 Train and evaluate a simple fully connected MNIST classifier.
-Then apply FGSM attack on the model and re-evaluate its accuracy.
+Then apply Projected Gradient Descent attack on the model and re-evaluate its
+accuracy.
 
 """
 
 import tensorflow as tf
 
-from adversarial_examples_tf2.attackers.fgsm_attacker import FGSMAttacker
+from adversarial_examples_tf2.attackers.pgd_attacker import PGDAttacker
 from adversarial_examples_tf2.experiments.classifier_utils.mnist_vanilla import get_trained_model
 from adversarial_examples_tf2.experiments.data_utils.mnist import load_mnist
 
@@ -24,9 +25,10 @@ def main():
     print("Test loss :", loss)
     print("Test accuracy :", accuracy)
 
-    # Perform fast gradient sign method attack on a sample of the test data.
+    # Perform fast Projected Gradient Descent attack on a sample of the test
+    # data.
     sample_batch_num = 2
-    attacker = FGSMAttacker(classifier, epsilon=0.1)
+    attacker = PGDAttacker(classifier, epsilon=0.1, n_iter=10)
 
     sample_data = test_data.take(sample_batch_num)
     sample_loss, sample_accuracy = classifier.evaluate(sample_data)

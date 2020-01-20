@@ -33,7 +33,8 @@ class BaseClassifier(object):
             data (tf.data.Dataset): the dataset the model uses for training. The
                 dataset shape needs to match the input shape set in the
                 initializer. For example, for MNIST, self.input_shape = (28, 28)
-                and the dataset feature shape needs to be (None, 28, 28).
+                and the dataset feature shape needs to be (None, 28, 28) and
+                the dataset label shape needs to be (None, ).
             epochs (int): the number of epochs, the number of times the given
                 dataset was iterated over during training.
         """
@@ -48,7 +49,8 @@ class BaseClassifier(object):
             data (tf.data.Dataset): the dataset the model uses for evaluation.
                 The dataset shape needs to match the input shape set in the
                 initializer. For example, for MNIST, self.input_shape = (28, 28)
-                and the dataset feature shape needs to be (None, 28, 28).
+                and the dataset feature shape needs to be (None, 28, 28) and
+                the dataset label shape needs to be (None, ).
 
         """
         raise NotImplementedError
@@ -70,6 +72,34 @@ class BaseClassifier(object):
         Returns:
             (LossFunctionWrapper or a callable loss function): should take in (
             label_tensor, logit_tensor) and return the loss.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def save_to_file(self, path):
+        """
+        Save self.model on disk at a specified path.
+
+        Args:
+            path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def load_from_file(self, path):
+        """
+        Load an existing model from disk into self.model.
+
+        Args:
+            path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+
+        Throws:
+            ValueError if the loaded model is incompatible with existing
+                instance variables related to model parameters.
+
         """
         raise NotImplementedError
 
