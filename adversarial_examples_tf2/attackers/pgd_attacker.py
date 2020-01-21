@@ -38,20 +38,20 @@ class PGDAttacker(BaseAttacker):
         loss_fn = self.model.get_loss_fn(
             reduction=tf.keras.losses.Reduction.NONE)
 
-        # TODO(summeryue): look up the appropriate initialization procedure.
-        perturbed_tensor = tf.Variable(input_tensor)
+        input_tensor = tf.cast(input_tensor, dtype=tf.float32)
+        perturbed_tensor = input_tensor
         for i in range(self.n_iter):
-            # TODO(summeryue): Make this into a tf.function to improve speed.
             with tf.GradientTape() as tape:
-                logit_tensor = self.model.model(perturbed_tensor)
-                loss = loss_fn(label_tensor, logit_tensor)
+                tape.watch(perturbed_tensor)
+                output_tensor = self.model.model(perturbed_tensor)
+                loss = loss_fn(label_tensor, output_tensor)
 
             gradient = tape.gradient(loss, perturbed_tensor)
-            perturbed_tensor.assign_add(gradient)
 
+            perturbed_tensor = perturbed_tensor + gradient
             # Project perturbed_tensor onto the L-infinity ball around
             # input_tensor.
-            perturbed_tensor.assign(self.epsilon * tf.sign(
-                perturbed_tensor - input_tensor) + input_tensor)
+            perturbed_tensor = self.epsilon * tf.sign(
+                perturbed_tensor - input_tensor) + input_tensor
 
-        return perturbed_tensor.value()
+        return perturbed_tensor

@@ -173,26 +173,25 @@ class VanillaDNN(BaseClassifier):
         Save self.model on disk at a specified path.
 
         Args:
-            path: The path to which the model is saved. The model file needs to
-                be a XXX file type.
+            path: The path to which the model is saved. The model file will be
+                a fully saved model.
 
         """
-        # TODO(summeryue): test this and finish documentation.
         self.model.save(path)
 
     def load_from_file(self, path):
         """
-        Load an existing model from disk into self.model.
+        Load an existing model from disk into self.model. The other params for
+        the model needs to be initialized via the constructor.
 
         Args:
             path: The path to which the model is saved. The model file needs to
-                be a XXX file type.
+                be a fully saved model from save_to_file.
 
         Throws:
             ValueError if the loaded model is incompatible with existing
                 instance variables related to model parameters.
 
         """
-        # TODO(summeryue): test this and finish documentation.
-        self.model.load(path)
+        self.model = tf.keras.models.load_model(path)
 

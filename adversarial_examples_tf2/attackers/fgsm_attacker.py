@@ -37,8 +37,8 @@ class FGSMAttacker(BaseAttacker):
             reduction=tf.keras.losses.Reduction.NONE)
         with tf.GradientTape() as tape:
             tape.watch(input_tensor)
-            logit_tensor = self.model.model(input_tensor)
-            loss = loss_fn(label_tensor, logit_tensor)
+            output_tensor = self.model.model(input_tensor)
+            loss = loss_fn(label_tensor, output_tensor)
 
         gradient = tape.gradient(loss, input_tensor)
         perturbed_input_tensor = input_tensor + self.epsilon * tf.sign(gradient)

@@ -1,5 +1,7 @@
 from adversarial_examples_tf2.classifiers.vanilla_dnn import VanillaDNN
 
+mnist_input_shape = (28, 28)
+mnist_output_shape = ()
 
 def get_trained_model(train_data, epochs):
     """
@@ -16,8 +18,6 @@ def get_trained_model(train_data, epochs):
         (BaseClassifier): a trained classifier.
 
     """
-    mnist_input_shape = (28, 28)
-    mnist_output_shape = ()
     model_params = [{"neuron_num": 128, "activation": "relu",
                      "dropout_ratio": 0.2},
                     {"neuron_num": 10, "activation":
@@ -26,3 +26,18 @@ def get_trained_model(train_data, epochs):
     classifier.train(train_data, epochs)
     return classifier
 
+def load_existing_model(path):
+    """
+    Load an existing classifier as a VanillaDNN classifier.
+
+    Args:
+        path: The path to which the model is saved. The model file needs to
+                be a XXX file type.
+    """
+    model_params = [{"neuron_num": 128, "activation": "relu",
+                     "dropout_ratio": 0.2},
+                    {"neuron_num": 10, "activation":
+                    "softmax"}]
+    classifier = VanillaDNN(mnist_input_shape, mnist_output_shape, model_params)
+    classifier.load_from_file(path)
+    return classifier

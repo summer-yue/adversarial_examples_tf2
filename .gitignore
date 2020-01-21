@@ -1,4 +1,7 @@
 .idea/
 *egg-info/
 *__pycache__/
+*.DS_Store
+
+adversarial_examples_tf2/experiments/models/*
 
