@@ -16,7 +16,7 @@ def main():
     train_data, test_data = load_mnist(batch_size)
 
     model_num = 10
-    paths = ["models/mnist/fully_connected/model-{}-{}"
+    paths = ["../models/mnist/fully_connected/model-{}-{}"
         .format(i+1, model_num) for i in range(model_num)]
 
     print("Paths: {}".format(paths))

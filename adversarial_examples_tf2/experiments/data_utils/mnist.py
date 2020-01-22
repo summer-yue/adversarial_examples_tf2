@@ -16,6 +16,7 @@ def load_mnist(batch_size):
 
     """
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+    # Normalize pixel values to be between 0 and 1.
     x_train, x_test = x_train / 255.0, x_test / 255.0
 
     train_data = tf.data.Dataset.from_tensor_slices((x_train, y_train))

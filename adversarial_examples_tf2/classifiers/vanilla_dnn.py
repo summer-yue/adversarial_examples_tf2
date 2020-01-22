@@ -49,8 +49,8 @@ class VanillaDNN(BaseClassifier):
         self.model = tf.keras.models.Sequential([tf.keras.layers.Flatten(
             input_shape=self.input_shape)])
         for layer_params in model_params:
-            if "neuron_num" not in layer_params  \
-                    or layer_params["neuron_num"] <= 0:
+            if "neuron_num" not in layer_params \
+                or layer_params["neuron_num"] <= 0:
                 raise ValueError("Invalid neuron_num specification in model "
                                  "params: {}".format(model_params))
             if "activation" not in layer_params:
@@ -99,7 +99,7 @@ class VanillaDNN(BaseClassifier):
 
         """
         return data.element_spec[0].shape[1:] == self.input_shape and \
-            data.element_spec[1].shape[1:] == self.output_shape
+               data.element_spec[1].shape[1:] == self.output_shape
 
     def train(self, data, epochs):
         """
@@ -117,8 +117,9 @@ class VanillaDNN(BaseClassifier):
 
         """
         if not self.validate_data(data):
-            raise ValueError("The training data is not a valid classifier "
-                             "input: {}".format(data))
+            raise ValueError("The eval data is not a valid classifier "
+                             "input: {}, expecting shape: {}".format(data,
+                                                                     self.input_shape))
         self.model.fit(data, epochs=epochs)
 
     def evaluate(self, data):
@@ -139,7 +140,8 @@ class VanillaDNN(BaseClassifier):
         """
         if not self.validate_data(data):
             raise ValueError("The eval data is not a valid classifier "
-                             "input: {}".format(data))
+                             "input: {}, expecting shape: {}".format(data,
+                                                                     self.input_shape))
         loss, accuracy = self.model.evaluate(data)
         return loss, accuracy
 
@@ -194,4 +196,3 @@ class VanillaDNN(BaseClassifier):
 
         """
         self.model = tf.keras.models.load_model(path)
-
