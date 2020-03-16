@@ -40,15 +40,12 @@ class VanillaDNN(BaseClassifier):
                     "neural_num".
 
         """
-        self.input_shape = input_shape
-        self.output_shape = output_shape
-        self.optimizer = optimizer
-        # Convert the input loss to a callable loss function if needed.
-        self.loss = tf.losses.get(loss)
+        super(VanillaDNN, self).__init__(input_shape,
+            output_shape, model_params, optimizer=optimizer, loss=loss)
 
         self.model = tf.keras.models.Sequential([tf.keras.layers.Flatten(
             input_shape=self.input_shape)])
-        for layer_params in model_params:
+        for layer_params in self.model_params:
             if "neuron_num" not in layer_params \
                 or layer_params["neuron_num"] <= 0:
                 raise ValueError("Invalid neuron_num specification in model "
@@ -65,20 +62,6 @@ class VanillaDNN(BaseClassifier):
         self.model.compile(optimizer=self.optimizer, loss=self.loss,
                            metrics=["accuracy"])
 
-    @classmethod
-    def load_from_file(cls, path):
-        """
-        Create a classifier by loading an existing Keras model from disk.
-
-        Args:
-            path: The path to which the model is saved. The model file needs to
-                be a XXX file type.
-
-        Returns:
-            (VanillaDNN): the classifier object with a loaded trained model.
-
-        """
-        raise
 
     def validate_data(self, data):
         """

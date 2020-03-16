@@ -4,6 +4,7 @@ from adversarial_examples_tf2.attackers.base_attacker import BaseAttacker
 
 
 class FGSMAttacker(BaseAttacker):
+
     def __init__(self, model, epsilon):
         """
         Initialize a fast gradient sign method attacker.
@@ -41,5 +42,6 @@ class FGSMAttacker(BaseAttacker):
             loss = loss_fn(label_tensor, output_tensor)
 
         gradient = tape.gradient(loss, input_tensor)
-        perturbed_input_tensor = input_tensor + self.epsilon * tf.sign(gradient)
-        return perturbed_input_tensor
+        perturbed_input_tensor = input_tensor + \
+            self.epsilon * tf.sign(gradient)
+        return tf.cast(perturbed_input_tensor, dtype=input_tensor.dtype)

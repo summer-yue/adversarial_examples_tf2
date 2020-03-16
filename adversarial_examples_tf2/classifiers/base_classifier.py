@@ -8,6 +8,16 @@ class BaseClassifier(object):
     """
     Defines the interface for classifiers in the adversarial examples library.
     """
+    def __init__(self, input_shape, output_shape, model_params,
+                 optimizer="adam",
+                 loss=tf.keras.losses.SparseCategoricalCrossentropy()):
+        self.input_shape = input_shape
+        self.output_shape = output_shape
+        self.model_params = model_params
+        self.optimizer = optimizer
+        # Convert the input loss to a callable loss function if needed.
+        self.loss = tf.losses.get(loss)
+
 
     @abstractmethod
     def validate_data(self, data):

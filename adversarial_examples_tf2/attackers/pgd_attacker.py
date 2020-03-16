@@ -4,6 +4,7 @@ from adversarial_examples_tf2.attackers.base_attacker import BaseAttacker
 
 
 class PGDAttacker(BaseAttacker):
+
     def __init__(self, model, epsilon, n_iter):
         """
         Initialize a projected gradient descent attacker.
@@ -38,7 +39,6 @@ class PGDAttacker(BaseAttacker):
         loss_fn = self.model.get_loss_fn(
             reduction=tf.keras.losses.Reduction.NONE)
 
-        input_tensor = tf.cast(input_tensor, dtype=tf.float32)
         perturbed_tensor = input_tensor
         for i in range(self.n_iter):
             with tf.GradientTape() as tape:
@@ -54,4 +54,5 @@ class PGDAttacker(BaseAttacker):
             perturbed_tensor = self.epsilon * tf.sign(
                 perturbed_tensor - input_tensor) + input_tensor
 
+        perturbed_tensor = tf.cast(perturbed_tensor, dtype=input_tensor.dtype)
         return perturbed_tensor
