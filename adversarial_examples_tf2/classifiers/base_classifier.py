@@ -18,7 +18,6 @@ class BaseClassifier(object):
         # Convert the input loss to a callable loss function if needed.
         self.loss = tf.losses.get(loss)
 
-
     @abstractmethod
     def validate_data(self, data):
         """
